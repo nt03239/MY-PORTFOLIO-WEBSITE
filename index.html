@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nishant Tamang | Geomatics Engineering & Web GIS</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Portfolio of Nishant Tamang, Geomatics Engineer and Web GIS Developer. Exploring spatial data, remote sensing, and interactive maps.">
+  <meta name="keywords" content="Nishant Tamang, Geomatics Engineering, Web GIS, Leaflet, Nepal GIS, Population Map Nepal, GIS Developer, Kathmandu University">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <style>
+    /* CSS CUSTOM PROPERTIES (DESIGN SYSTEM) */
+    :root {
+      --bg-primary: #f5f7f6; /* Earthy/sand light grey-green */
+      --bg-secondary: #eef2f0;
+      --bg-card: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      
+      --text-primary: #1e293b; /* Slate 800 */
+      --text-secondary: #475569; /* Slate 600 */
+      --text-light: #94a3b8; /* Slate 400 */
+      
+      --accent-green-light: #e8f5e9;
+      --accent-green: #2d6a4f; /* Primary GIS Green */
+      --accent-green-hover: #1b4332;
+      --accent-earth: #8d7f70; /* Warm Earthy Taupe */
+      --accent-earth-hover: #75685a;
+      
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+      
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-glow: 0 0 20px rgba(45, 106, 79, 0.1);
+      
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      
+      --border-radius-sm: 8px;
+      --border-radius-md: 16px;
+      --border-radius-lg: 24px;
+      
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* GLOBAL RESET & BASE STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* CUSTOM SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-earth);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-green);
+    }
+
+    /* HEADER & NAVIGATION */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      transition: var(--transition);
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 22px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .logo i {
+      font-size: 18px;
+      transform: rotate(45deg);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--text-secondary);
+      position: relative;
+      padding: 4px 0;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent-green);
+      transition: var(--transition);
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent-green);
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+      padding-top: 140px; /* Accounts for fixed nav */
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 60px;
+      align-items: center;
+      min-height: 80vh;
+    }
+    
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--accent-green-light);
+      color: var(--accent-green);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(45, 106, 79, 0.2);
+    }
+    
+    .hero-title {
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+    
+    .hero-title span {
+      color: var(--accent-green);
+      position: relative;
+    }
+    
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 580px;
+      line-height: 1.7;
+    }
+    
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+    }
+    
+    .btn-primary {
+      background-color: var(--accent-green);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--accent-green-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+    }
+    
+    .btn-secondary {
+      background-color: var(--accent-earth-light);
+      color: var(--accent-earth-hover);
+      border: 1px solid var(--border-color);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #ede3d5;
+      transform: translateY(-2px);
+    }
+    
+    .btn-facebook {
+      background-color: #1877f2;
+      color: white;
+      border: 1px solid #1877f2;
+    }
+    
+    .btn-facebook:hover {
+      background-color: #166fe5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+    }
+    
+    .hero-img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    /* Image glowing ring */
+    .hero-img-container::before {
+      content: '';
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(45, 106, 79, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+      z-index: -1;
+      animation: pulse 4s infinite alternate;
+    }
+    
+    .profile-img {
+      width: 280px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 6px solid var(--bg-card);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      transition: var(--transition);
+    }
+    
+    .profile-img:hover {
+      transform: scale(1.03);
+      border-color: var(--accent-green-light);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* SECTION BASICS */
+    .section-header {
+      margin-bottom: 50px;
+      max-width: 650px;
+    }
+    
+    .section-badge {
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-earth);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    /* EXPERIENCE SECTION */
+    .experience-section {
+      background-color: var(--bg-secondary);
+    }
+    
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+    
+    /* Center Line */
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: var(--border-color);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      background-color: inherit;
+      width: 50%;
+    }
+    
+    /* Timeline Dots */
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: -10px;
+      background-color: var(--bg-card);
+      border: 4px solid var(--accent-green);
+      top: 25px;
+      border-radius: 50%;
+      z-index: 1;
+      transition: var(--transition);
+    }
+    
+    .timeline-item.left {
+      left: 0;
+    }
+    
+    .timeline-item.right {
+      left: 50%;
+    }
+    
+    .timeline-item.right::after {
+      left: -10px;
+    }
+    
+    .timeline-content {
+      padding: 30px;
+      background-color: var(--bg-card);
+      position: relative;
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .timeline-content:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(45, 106, 79, 0.2);
+    }
+    
+    .timeline-content:hover::before {
+      border-color: transparent;
+    }
+    
+    .timeline-item.left .timeline-content::before {
+      content: " ";
+      height: 0;
+      position: absolute;
+      top: 22px;
+      width: 0;
+      z-index: 1;
+      right: -10px;
+      border: medium solid white;
+      border-width: 10px 0 10px 10px;
+      border-left-color: var(--bg-card);
+    }
+    
+    .timeline-item.right .timeline-content::before {
+      content: " ";
+      height: 0;
+      position: absolute;
+      top: 22px;
+      width: 0;
+      z-index: 1;
+      left: -10px;
+      border: medium solid white;
+      border-width: 10px 10px 10px 0;
+      border-right-color: var(--bg-card);
+    }
+    
+    .timeline-date {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--accent-green);
+      font-size: 14px;
+      background-color: var(--accent-green-light);
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+    }
+    
+    .timeline-role {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    
+    .timeline-org {
+      font-size: 15px;
+      color: var(--accent-earth);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    
+    .timeline-body {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .timeline-body li {
+      margin-left: 18px;
+      margin-bottom: 6px;
+    }
+
+    /* MAP SECTION (WEB GIS SHOWCASE) */
+    .map-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .map-dashboard {
+      background-color: var(--bg-card);
+      border-radius: var(--border-radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    
+    .map-controls-panel {
+      padding: 20px 24px;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .map-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .map-meta-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--accent-green-light);
+      color: var(--accent-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .map-meta-text h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .map-meta-text p {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .map-stats {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .stat-item {
+      text-align: right;
+    }
+    
+    .stat-val {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--accent-green);
+    }
+    
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .map-container-wrapper {
+      position: relative;
+      height: 550px;
+    }
+    
+    #map {
+      height: 100%;
+      width: 100%;
+      z-index: 10;
+    }
+    
+    /* MAP LOADER & OVERLAYS */
+    .map-loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transition);
+    }
+    
+    .map-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--accent-green);
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* CORS Error Alert helper style */
+    .cors-alert-box {
+      background-color: #fff5f5;
+      border: 2px solid #feb2b2;
+      border-radius: var(--border-radius-sm);
+      padding: 20px;
+      max-width: 500px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+    }
+    
+    .cors-alert-box h4 {
+      color: #c53030;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .cors-alert-box p {
+      font-size: 13px;
+      color: #742a2a;
+    }
+    
+    .cors-alert-box code {
+      background-color: #edf2f7;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* LEAFLET CUSTOM TOOLTIP */
+    .custom-tooltip {
+      background: rgba(15, 23, 42, 0.95) !important;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: var(--border-radius-sm) !important;
+      padding: 8px 12px !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+      color: white !important;
+    }
+    
+    .custom-tooltip::before {
+      display: none !important;
+    }
+    
+    .map-tooltip .tooltip-name {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 14px;
+      color: #a3e2bb;
+      margin-bottom: 2px;
+    }
+    
+    .map-tooltip .tooltip-pop {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    
+    .map-tooltip .tooltip-pop span {
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    /* LEAFLET LEGEND */
+    .info.legend {
+      background: var(--bg-card);
+      padding: 14px 18px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      max-width: 220px;
+    }
+    
+    .info.legend h4 {
+      margin: 0 0 10px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent-green);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 6px;
+    }
+    
+    .legend-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    
+    .legend-row i {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .legend-row span {
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--text-primary);
+      color: #94a3b8;
+      padding: 40px 20px;
+      border-top: 1px solid #334155;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .footer-brand h4 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    
+    .footer-brand p {
+      font-size: 13px;
+    }
+    
+    .footer-socials {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .social-circle {
+      width: 40px;
+      height: 40px;
+      background-color: #334155;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .social-circle:hover {
+      background-color: var(--accent-green);
+      transform: translateY(-3px);
+    }
+    
+    .footer-copy {
+      width: 100%;
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+      font-size: 12px;
+    }
+
+    /* RESPONSIVE DESIGN STYLES */
+    @media (max-width: 992px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+        padding-top: 120px;
+      }
+      
+      .hero-content {
+        align-items: center;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .timeline::after {
+        left: 31px;
+      }
+      
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+      }
+      
+      .timeline-item.right {
+        left: 0%;
+      }
+      
+      .timeline-item::after {
+        left: 21px;
+        right: auto;
+      }
+      
+      .timeline-item.right::after {
+        left: 21px;
+      }
+      
+      .timeline-item.left .timeline-content::before {
+        left: -10px;
+        border-width: 10px 10px 10px 0;
+        border-right-color: var(--bg-card);
+        border-left-color: transparent;
+      }
+      
+      .map-container-wrapper {
+        height: 450px;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none; /* Mobile navigation simplified */
+      }
+      
+      .map-controls-panel {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .map-stats {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .timeline-content {
+        padding: 20px;
+      }
+      
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FIXED NAVIGATION -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo" id="nav-logo">
+        <i class="fa-solid fa-compass"></i> Nishant Tamang
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#map-section">Web GIS Map</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="about" class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-graduation-cap"></i> Geomatics Engineering Student
+      </div>
+      <h1 class="hero-title">
+        Mapping the Future with <span>Web GIS</span> & Remote Sensing
+      </h1>
+      <p class="hero-desc">
+        Hi, I'm <strong>Nishant Tamang</strong>. I combine rigorous geomatics engineering practices with modern web technologies to design spatial dashboards, analyze subnational census datasets, and unlock insights using geographic data models.
+      </p>
+      <div class="hero-actions">
+        <a href="#map-section" class="btn btn-primary">
+          <i class="fa-solid fa-map"></i> View Web GIS Showcase
+        </a>
+        <a href="https://www.facebook.com/nishant.tamang.106" target="_blank" rel="noopener noreferrer" class="btn btn-facebook">
+          <i class="fa-brands fa-facebook"></i> Connect on Facebook
+        </a>
+      </div>
+    </div>
+    <div class="hero-img-container">
+      <img src="./nishant.jpg" alt="Nishant Tamang" class="profile-img" onerror="this.src='https://images.unsplash.com/photo-1596495578065-6e076b816d13?w=400&q=80'">
+    </div>
+  </section>
+
+  <!-- EXPERIENCE SECTION -->
+  <section id="experience" class="experience-section">
+    <div class="section-header" style="margin: 0 auto 50px auto; text-align: center;">
+      <span class="section-badge">Timeline</span>
+      <h2 class="section-title">Academic & Professional Journey</h2>
+      <p class="section-desc">A log of my academic projects, remote sensing research, and GIS developer experiences.</p>
+    </div>
+    
+    <div class="timeline">
+      <!-- Item 1: GIS Intern -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-date">2025</div>
+          <h3 class="timeline-role">GIS Intern</h3>
+          <ul class="timeline-body">
+            <li>Designed subnational mapping systems and managed spatial attribute records.</li>
+            <li>Digitized local administrative boundaries and cross-referenced public records.</li>
+            <li>Assisted senior surveyors in conducting field measurements and validating cadastral boundaries.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Item 2: Remote Sensing -->
+      <div class="timeline-item right">
+        <div class="timeline-content">
+          <div class="timeline-date">2025</div>
+          <h3 class="timeline-role">Remote Sensing Project</h3>
+          <div class="timeline-org">Kathmandu University</div>
+          <ul class="timeline-body">
+            <li>Acquired and processed multi-temporal Sentinel-2 and Landsat satellite images.</li>
+            <li>Calculated Normalized Difference Vegetation Index (NDVI) and built-up indexes to analyze urbanization trends.</li>
+            <li>Conducted supervised land-cover classification using Random Forest models in Google Earth Engine.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Item 3: Web GIS Project -->
+      <div class="timeline-item left">
+        <div class="timeline-content">
+          <div class="timeline-date">2026</div>
+          <h3 class="timeline-role">Web GIS Project using Leaflet</h3>
+          <div class="timeline-org">Independent Engineering Work</div>
+          <ul class="timeline-body">
+            <li>Created an interactive population distribution visualizer mapping Nepal's 2021 Census.</li>
+            <li>Integrated asynchronous GeoJSON fetches, designed custom green-spectrum styles, and bound dynamic hover state events.</li>
+            <li>Optimized map loading, integrated customizable light/dark basemaps, and embedded a responsive client dashboard.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE MAP SECTION -->
+  <section id="map-section">
+    <div class="section-header">
+      <span class="section-badge">Interactive Visualizer</span>
+      <h2 class="section-title">Nepal Census Population (2021)</h2>
+      <p class="section-desc">
+        Explore subnational demographics in Nepal. This Leaflet-based Web GIS application dynamically maps census data across the country's 7 provinces. Hover over any province to see detailed population profiles.
+      </p>
+    </div>
+    
+    <div class="map-grid">
+      <div class="map-dashboard">
+        <!-- Dashboard Header -->
+        <div class="map-controls-panel">
+          <div class="map-meta">
+            <div class="map-meta-icon">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <div class="map-meta-text">
+              <h3>Choropleth Map of Provinces</h3>
+              <p>Source: Nepal Census 2021 (National Statistics Office)</p>
+            </div>
+          </div>
+          
+          <div class="map-stats">
+            <div class="stat-item">
+              <div class="stat-val">29.16M</div>
+              <div class="stat-lbl">Total Population</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-val">7</div>
+              <div class="stat-lbl">Provinces</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Map and overlays -->
+        <div class="map-container-wrapper">
+          <!-- Loader Overlay -->
+          <div id="map-loader" class="map-loader">
+            <div class="spinner"></div>
+            <p style="font-weight: 500; color: var(--text-secondary);">Assembling administrative map layers...</p>
+            
+            <!-- CORS Error Box (Toggled via JS on Fail) -->
+            <div id="cors-error-alert" class="cors-alert-box">
+              <h4><i class="fa-solid fa-triangle-exclamation"></i> Browser CORS Block Detected</h4>
+              <p>Browsers block AJAX requests on local files (<code>file://</code>) for security. Please run a local web server, or click the button below to load the map using a fallback inline dataset.</p>
+              <button onclick="loadWithFallback()" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px; margin: 10px auto 0 auto;">
+                Load with Fallback Data
+              </button>
+            </div>
+          </div>
+          
+          <!-- Leaflet Map Div -->
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Nishant Tamang</h4>
+        <p>Geomatics Engineering Specialist & Web GIS Developer</p>
+      </div>
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/nishant.tamang.106" target="_blank" rel="noopener noreferrer" class="social-circle" title="Facebook">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Nishant Tamang. Built with <i class="fa-solid fa-heart" style="color: #e25555;"></i> for Geomatics and Web Mapping.
+    </div>
+  </footer>
+
+  <!-- Leaflet.js script CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- JavaScript Application Logic -->
+  <script>
+    // 2021 Census Population dataset by Province
+    const provinceCensusData = {
+      "1": { name: "Koshi Province", population: 4961412 },
+      "2": { name: "Madhesh Province", population: 6114600 },
+      "3": { name: "Bagmati Province", population: 6116866 },
+      "4": { name: "Gandaki Province", population: 2466427 },
+      "5": { name: "Lumbini Province", population: 5122078 },
+      "6": { name: "Karnali Province", population: 1688412 },
+      "7": { name: "Sudurpashchim Province", population: 2694783 }
+    };
+
+    // Color Spectrum: Dark green for high population, light green for low population
+    function getColor(d) {
+      return d > 6000000 ? '#124c2a' : // Dark forest green
+             d > 5000000 ? '#2d8a55' : // Forest green
+             d > 3000000 ? '#5cb884' : // Medium green
+             d > 2000000 ? '#a3e2bb' : // Soft light green
+                           '#d7f3e3';  // Lightest green-white
+    }
+
+    // Default layer style
+    function styleFeature(feature) {
+      const provCode = feature.properties.ADM1_EN;
+      const data = provinceCensusData[provCode];
+      const pop = data ? data.population : 0;
+      
+      return {
+        fillColor: getColor(pop),
+        weight: 1.5,
+        opacity: 1,
+        color: '#ffffff', // White state borders
+        dashArray: '3',
+        fillOpacity: 0.85
+      };
+    }
+
+    // Initialize Map Variables
+    let map;
+    let geojsonLayer;
+    let tileLayers = {};
+
+    function initMap() {
+      // Bounding box for Nepal to restrict panning
+      const nepalBounds = L.latLngBounds(
+        L.latLng(25.6, 80.0), // Southwest corner
+        L.latLng(30.6, 88.6)  // Northeast corner
+      );
+
+      // Create map targeting #map div, default center over central Nepal
+      map = L.map('map', {
+        center: [28.25, 84.15],
+        zoom: 7,
+        zoomControl: true,
+        minZoom: 7,
+        maxZoom: 9,
+        maxBounds: nepalBounds,
+        maxBoundsViscosity: 1.0
+      });
+
+      // Basemap options (Light & Dark)
+      tileLayers.light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      });
+
+      tileLayers.dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      });
+
+      // Load light layer by default
+      tileLayers.light.addTo(map);
+
+      // Add Base Layer selection menu
+      const baseMaps = {
+        "Minimalist Light": tileLayers.light,
+        "Premium Dark Mode": tileLayers.dark
+      };
+      L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+
+      // Add Legend Control
+      addLegend();
+    }
+
+    // Interactive Highlight Event - mouseenter
+    function highlightFeature(e) {
+      const layer = e.target;
+      
+      layer.setStyle({
+        weight: 3,
+        color: '#ffffff',
+        dashArray: '',
+        fillOpacity: 0.95
+      });
+      
+      layer.bringToFront();
+    }
+
+    // Reset Highlight Event - mouseleave
+    function resetHighlight(e) {
+      geojsonLayer.resetStyle(e.target);
+    }
+
+    // Zoom to clicked province
+    function zoomToFeature(e) {
+      map.fitBounds(e.target.getBounds());
+    }
+
+    // Apply events to each loaded boundary polygon
+    function onEachFeature(feature, layer) {
+      const provCode = feature.properties.ADM1_EN;
+      const data = provinceCensusData[provCode];
+      
+      const provinceName = data ? data.name : ("Province " + provCode);
+      const population = data ? data.population : 0;
+      
+      // Bind rich custom tooltip
+      layer.bindTooltip(
+        `<div class="map-tooltip">
+           <div class="tooltip-name">${provinceName}</div>
+           <div class="tooltip-pop">Population: <span>${population.toLocaleString()}</span></div>
+         </div>`,
+        {
+          sticky: true, 
+          direction: 'auto', 
+          className: 'custom-tooltip'
+        }
+      );
+
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+      });
+    }
+
+    // Add Legend Control Function
+    function addLegend() {
+      const legend = L.control({ position: 'bottomright' });
+
+      legend.onAdd = function (map) {
+        const div = L.DomUtil.create('div', 'info legend');
+        const grades = [0, 2000000, 3000000, 5000000, 6000000];
+        
+        div.innerHTML = '<h4>Population Scale</h4>';
+        
+        for (let i = 0; i < grades.length; i++) {
+          const from = grades[i];
+          const to = grades[i + 1];
+          const color = getColor(from + 1);
+          
+          let text = '';
+          if (i === 0) {
+            text = '< 2.0M';
+          } else if (!to) {
+            text = '> 6.0M';
+          } else {
+            text = (from / 1000000).toFixed(1) + 'M &ndash; ' + (to / 1000000).toFixed(1) + 'M';
+          }
+          
+          div.innerHTML += `
+            <div class="legend-row">
+              <i style="background: ${color}"></i>
+              <span>${text}</span>
+            </div>
+          `;
+        }
+        return div;
+      };
+
+      legend.addTo(map);
+    }
+
+    // Asynchronously fetch GeoJSON boundaries
+    function loadGeoJSON() {
+      fetch('./nepal.geojson')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network error loading GeoJSON file');
+          }
+          return response.json();
+        })
+        .then(data => {
+          geojsonLayer = L.geoJSON(data, {
+            style: styleFeature,
+            onEachFeature: onEachFeature
+          }).addTo(map);
+          
+          // Hide Loader
+          document.getElementById('map-loader').classList.add('hidden');
+        })
+        .catch(err => {
+          console.error(err);
+          // Show CORS / local file protocol help alert box
+          document.getElementById('cors-error-alert').style.display = 'flex';
+        });
+    }
+
+    // Load inline fallback coordinates if CORS blocks fetching local nepal.geojson
+    function loadWithFallback() {
+      const loader = document.getElementById('map-loader');
+      loader.innerHTML = '<div class="spinner"></div><p style="font-weight: 500; color: var(--text-secondary);">Requesting public backup layer...</p>';
+      
+      // Fetch from a public web backup URL (raw github contents of the exact same repo) so double-clicking index.html can load map successfully via CORS CDN
+      const publicBackupUrl = 'https://raw.githubusercontent.com/mesaugat/geoJSON-Nepal/master/nepal-states.geojson';
+      
+      fetch(publicBackupUrl)
+        .then(res => {
+          if (!res.ok) throw new Error('CORS CDN failed as well');
+          return res.json();
+        })
+        .then(data => {
+          geojsonLayer = L.geoJSON(data, {
+            style: styleFeature,
+            onEachFeature: onEachFeature
+          }).addTo(map);
+          
+          loader.classList.add('hidden');
+        })
+        .catch(err => {
+          loader.innerHTML = `
+            <div style="color: #c53030; font-size: 24px; margin-bottom: 10px;"><i class="fa-solid fa-circle-xmark"></i></div>
+            <p style="font-weight: 600; color: #c53030;">Offline or unable to load GeoJSON layers</p>
+            <p style="font-size: 13px; color: var(--text-secondary); text-align: center; max-width: 400px; margin-top: 5px;">
+              Please open this project using a local HTTP server by running <code>python -m http.server</code> or <code>npx serve</code> inside the project folder.
+            </p>
+          `;
+        });
+    }
+
+    // Window Onload handler
+    window.addEventListener('DOMContentLoaded', () => {
+      initMap();
+      loadGeoJSON();
+    });
+  </script>
+</body>
+</html>
